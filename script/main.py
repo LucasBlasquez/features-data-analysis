@@ -5,10 +5,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
 
 filepath = "../res/high_diamond_ranked_10min.csv"
-lol_data = pd.read_csv(filepath, index_col="gameId")
-lol_data.head()
+lol_data = pd.read_csv(filepath)
 
 #Apply in lol_data blueWins replace 1 'Yes' and 0 'No' 
 def new_wins(wins):
@@ -20,7 +20,6 @@ def new_wins(wins):
         return wins
 
 new_lol_data = lol_data.apply(new_wins,axis='columns')
-new_lol_data.head(10)
 
 #Distribuiton chart of blue team victories x blue gold per minute
 sns.swarmplot(x=new_lol_data['blueWins'],y=new_lol_data['blueGoldPerMin'])
@@ -28,8 +27,13 @@ plt.title("Relation of Gold per Minute and Victorys in the first 10 min of High 
 plt.ylabel("Gold Per Minute")
 plt.xlabel("Victory")
 
+#Converting categorical variables into numerical features to improve the model
+features = lol_data.iloc[:,2:20]
+encoder = LabelEncoder()
+feat_lol = features.apply(encoder.fit_transform)
+
 #features and target of (only) blue team to Machine Learning
-X = lol_data.iloc[:,1:20]
+X = feat_lol
 y = lol_data['blueWins']
 
 #test_size is default 0.25, that is 25% of data to train and 75% to test
