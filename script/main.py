@@ -43,6 +43,6 @@ train_X, val_X, train_y, val_y = train_test_split(X, y)
 model = ExtraTreesClassifier()
 model.fit(train_X,train_y)
 
-#accuracy of model predict is ~73%
+#score/accuracy of model predict is ~73%
 result = model.score(val_X, val_y)
 predict = model.predict(train_X)
